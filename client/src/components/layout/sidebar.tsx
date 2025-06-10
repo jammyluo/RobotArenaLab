@@ -10,6 +10,7 @@ import {
 const navigation = [
   { name: "Training Platform", href: "/training", icon: Zap },
   { name: "Model Library", href: "/models", icon: Archive },
+  { name: "Model Marketplace", href: "/marketplace", icon: Archive },
   { name: "Community", href: "/community", icon: Users },
   { name: "Remote Validation", href: "/validation", icon: Video },
 ];

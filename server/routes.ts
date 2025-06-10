@@ -17,6 +17,38 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
 });
 
+// ========== 模型市场 mock 数据 ==========
+const marketplaceModels = [
+  {
+    id: 1,
+    name: "Humanoid Soccer Player",
+    description: "A high-performance humanoid robot model for soccer simulation.",
+    thumbnailUrl: "/images/humanoid.jpg",
+    category: "humanoid",
+    tags: ["soccer", "simulation"],
+    rating: 4.8,
+    downloads: 245,
+    price: 0,
+    likes: 32,
+    license: "MIT",
+    author: { id: 1, name: "Dr. Sarah Rodriguez", avatar: "/images/author1.png", affiliation: "MIT CSAIL" },
+  },
+  {
+    id: 2,
+    name: "Drone Swarm Controller",
+    description: "Controller for multi-agent drone swarms.",
+    thumbnailUrl: "/images/drone.jpg",
+    category: "drone",
+    tags: ["swarm", "controller"],
+    rating: 4.6,
+    downloads: 198,
+    price: 99,
+    likes: 21,
+    license: "Apache-2.0",
+    author: { id: 2, name: "Prof. Michael Kim", avatar: "/images/author2.png", affiliation: "Stanford AI Lab" },
+  },
+];
+
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
@@ -285,6 +317,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }, 2000); // Update every 2 seconds
   }
+
+  // ========== API 路由 ==========
+
+  // 获取模型市场列表
+  app.get('/api/marketplace/models', (req, res) => {
+    res.json(marketplaceModels);
+  });
+
+  // 获取模型详情
+  app.get('/api/marketplace/models/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const model = marketplaceModels.find(m => m.id === id);
+    if (!model) return res.status(404).json({ error: 'Model not found' });
+    res.json(model);
+  });
+
+  // 点赞模型
+  app.post('/api/marketplace/models/:id/like', (req, res) => {
+    const id = Number(req.params.id);
+    const model = marketplaceModels.find(m => m.id === id);
+    if (!model) return res.status(404).json({ error: 'Model not found' });
+    model.likes++;
+    res.json({ success: true, likes: model.likes });
+  });
+
+  // 下载/购买模型
+  app.post('/api/marketplace/models/:id/download', (req, res) => {
+    const id = Number(req.params.id);
+    const model = marketplaceModels.find(m => m.id === id);
+    if (!model) return res.status(404).json({ error: 'Model not found' });
+    model.downloads++;
+    res.json({ success: true, downloads: model.downloads });
+  });
 
   return httpServer;
 }

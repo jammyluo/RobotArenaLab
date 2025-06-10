@@ -10,6 +10,7 @@ import ModelsPage from "@/pages/models";
 import CommunityPage from "@/pages/community";
 import ValidationPage from "@/pages/validation";
 import NotFound from "@/pages/not-found";
+import MarketplacePage from "@/pages/marketplace";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/models" component={ModelsPage} />
       <Route path="/community" component={CommunityPage} />
       <Route path="/validation" component={ValidationPage} />
+      <Route path="/marketplace" component={MarketplacePage} />
       <Route component={NotFound} />
     </Switch>
   );
