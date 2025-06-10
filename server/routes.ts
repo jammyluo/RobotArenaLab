@@ -47,6 +47,20 @@ const marketplaceModels = [
     license: "Apache-2.0",
     author: { id: 2, name: "Prof. Michael Kim", avatar: "/images/author2.png", affiliation: "Stanford AI Lab" },
   },
+  {
+    id: 3,
+    name: "Humanoid Soccer Player2",
+    description: "A high-performance humanoid robot model for soccer simulation.",
+    thumbnailUrl: "/images/humanoid.jpg",
+    category: "humanoid",
+    tags: ["soccer", "simulation"],
+    rating: 4.8,
+    downloads: 245,
+    price: 0,
+    likes: 32,
+    license: "MIT",
+    author: { id: 1, name: "Dr. Sarah Rodriguez", avatar: "/images/author2.png", affiliation: "MIT CSAIL" },
+  },  
 ];
 
 // ========== 训练页面 mock 数据 ==========
