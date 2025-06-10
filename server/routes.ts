@@ -49,6 +49,64 @@ const marketplaceModels = [
   },
 ];
 
+// ========== 训练页面 mock 数据 ==========
+type TrainingMetric = { epoch: number; loss: number; reward: number; accuracy: number };
+const mockTrainingJobs = [
+  {
+    id: 1,
+    name: "Job Alpha",
+    userId: 1,
+    status: "running",
+    totalEpochs: 200,
+    currentEpoch: 50,
+    progress: 25,
+    modelId: 1,
+    startedAt: new Date(),
+    completedAt: null,
+  },
+  {
+    id: 2,
+    name: "Job Beta",
+    userId: 1,
+    status: "completed",
+    totalEpochs: 100,
+    currentEpoch: 100,
+    progress: 100,
+    modelId: 2,
+    startedAt: new Date(Date.now() - 1000 * 60 * 60),
+    completedAt: new Date(Date.now() - 1000 * 60 * 30),
+  },
+];
+
+const mockTrainingMetrics: Record<number, TrainingMetric[]> = {
+  1: Array.from({ length: 50 }, (_, i) => ({
+    epoch: i + 1,
+    loss: 0.1 * Math.exp(-i / 30) + Math.random() * 0.02,
+    reward: 200 + i * 2 + Math.random() * 10,
+    accuracy: 70 + i * 0.5 + Math.random() * 5,
+  })),
+  2: Array.from({ length: 100 }, (_, i) => ({
+    epoch: i + 1,
+    loss: 0.1 * Math.exp(-i / 40) + Math.random() * 0.01,
+    reward: 180 + i * 2.5 + Math.random() * 8,
+    accuracy: 65 + i * 0.6 + Math.random() * 4,
+  })),
+};
+
+// ========== 训练日志 mock 数据 ==========
+const mockTrainingLogs: Record<number, { timestamp: string; level: string; message: string }[]> = {
+  1: Array.from({ length: 50 }, (_, i) => ({
+    timestamp: new Date(Date.now() - (50 - i) * 1000 * 10).toISOString(),
+    level: i % 10 === 0 ? 'ERROR' : i % 5 === 0 ? 'WARN' : 'INFO',
+    message: `Job 1 log message at epoch ${i + 1}`
+  })),
+  2: Array.from({ length: 100 }, (_, i) => ({
+    timestamp: new Date(Date.now() - (100 - i) * 1000 * 10).toISOString(),
+    level: i % 15 === 0 ? 'ERROR' : i % 7 === 0 ? 'WARN' : 'INFO',
+    message: `Job 2 log message at epoch ${i + 1}`
+  })),
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
@@ -138,9 +196,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Training Jobs API
   app.get("/api/training-jobs", async (req, res) => {
     try {
-      const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
-      const jobs = await storage.getTrainingJobs(userId);
-      res.json(jobs);
+      // mock 数据优先
+      res.json(mockTrainingJobs);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch training jobs" });
     }
@@ -197,8 +254,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/training-metrics/:jobId", async (req, res) => {
     try {
       const jobId = parseInt(req.params.jobId);
-      const metrics = await storage.getTrainingMetrics(jobId);
-      res.json(metrics);
+      // mock 数据优先
+      if (mockTrainingMetrics[jobId]) {
+        res.json(mockTrainingMetrics[jobId]);
+        return;
+      }
+      res.json([]);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch training metrics" });
     }
@@ -349,6 +410,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!model) return res.status(404).json({ error: 'Model not found' });
     model.downloads++;
     res.json({ success: true, downloads: model.downloads });
+  });
+
+  // ========== Training Logs API ==========
+  // 提供一个接口返回全部日志
+  app.get('/api/training-logs/:jobId', (req, res) => {
+    const jobId = parseInt(req.params.jobId);
+    if (mockTrainingLogs[jobId]) {
+      res.json(mockTrainingLogs[jobId]);
+    } else {
+      res.json([]);
+    }
   });
 
   return httpServer;

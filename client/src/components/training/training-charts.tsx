@@ -106,8 +106,21 @@ export function TrainingCharts({ metrics }: TrainingChartsProps) {
     ],
   };
 
+  const accuracyData = {
+    labels: metrics.map(m => `Epoch ${m.epoch}`),
+    datasets: [
+      {
+        label: 'Accuracy',
+        data: metrics.map(m => m.accuracy),
+        borderColor: '#f59e42',
+        backgroundColor: 'rgba(245, 158, 66, 0.1)',
+        fill: true,
+      },
+    ],
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card className="p-4 bg-slate-800 border-slate-700">
         <h4 className="text-sm font-medium text-slate-300 mb-3">Loss Curve</h4>
         <div className="h-48">
@@ -126,6 +139,19 @@ export function TrainingCharts({ metrics }: TrainingChartsProps) {
         <div className="h-48">
           {metrics.length > 0 ? (
             <Line data={rewardData} options={chartOptions} />
+          ) : (
+            <div className="h-full flex items-center justify-center bg-slate-700 rounded-lg">
+              <p className="text-slate-400 text-sm">No training data available</p>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      <Card className="p-4 bg-slate-800 border-slate-700">
+        <h4 className="text-sm font-medium text-slate-300 mb-3">Accuracy Curve</h4>
+        <div className="h-48">
+          {metrics.length > 0 ? (
+            <Line data={accuracyData} options={chartOptions} />
           ) : (
             <div className="h-full flex items-center justify-center bg-slate-700 rounded-lg">
               <p className="text-slate-400 text-sm">No training data available</p>

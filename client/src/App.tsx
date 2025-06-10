@@ -15,12 +15,12 @@ import MarketplacePage from "@/pages/marketplace";
 function Router() {
   return (
     <Switch>
+      <Route path="/marketplace" component={MarketplacePage} />
       <Route path="/" component={TrainingPage} />
       <Route path="/training" component={TrainingPage} />
       <Route path="/models" component={ModelsPage} />
       <Route path="/community" component={CommunityPage} />
       <Route path="/validation" component={ValidationPage} />
-      <Route path="/marketplace" component={MarketplacePage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -30,7 +30,10 @@ function App() {
   const [location] = useLocation();
   let title = "Training Platform";
   let description = "Configure and monitor your robot training experiments";
-  if (location === "/models") {
+  if (location === "/marketplace") {
+    title = "Model Marketplace";
+    description = "Discover and share robot models";
+  } else if (location === "/models") {
     title = "Model Library";
     description = "Browse and manage your robot models";
   } else if (location === "/community") {

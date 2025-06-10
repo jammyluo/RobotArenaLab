@@ -19,9 +19,17 @@ export function LogOutput({ jobId }: LogOutputProps) {
   const logsEndRef = useRef<HTMLDivElement>(null);
   const { subscribe } = useWebSocket();
 
+  // 加载历史日志
   useEffect(() => {
     if (!jobId) return;
+    fetch(`/api/training-logs/${jobId}`)
+      .then(res => res.json())
+      .then(data => setLogs(data));
+  }, [jobId]);
 
+  // WebSocket 追加新日志
+  useEffect(() => {
+    if (!jobId) return;
     const unsubscribe = subscribe('training_log', (data: any) => {
       if (data.jobId === jobId) {
         const newLog: LogEntry = {
@@ -29,11 +37,9 @@ export function LogOutput({ jobId }: LogOutputProps) {
           level: data.level || 'INFO',
           message: data.message
         };
-        
-        setLogs(prev => [...prev, newLog].slice(-100)); // Keep last 100 logs
+        setLogs(prev => [...prev, newLog].slice(-100));
       }
     });
-
     return unsubscribe;
   }, [jobId, subscribe]);
 
