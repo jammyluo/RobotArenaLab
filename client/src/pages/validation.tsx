@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Topbar } from "@/components/layout/topbar";
 import { VideoStream } from "@/components/validation/video-stream";
 import type { Model, ValidationSession } from "@shared/schema";
 
@@ -113,11 +112,6 @@ export default function ValidationPage() {
 
   return (
     <>
-      <Topbar 
-        title="Remote Robot Validation"
-        description="Test your models on real hardware remotely"
-      />
-      
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>

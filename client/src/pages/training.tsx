@@ -10,7 +10,6 @@ import { RewardConfiguration } from "@/components/training/reward-config";
 import { TrainingQueue } from "@/components/training/training-queue";
 import { TrainingCharts } from "@/components/training/training-charts";
 import { LogOutput } from "@/components/training/log-output";
-import { Topbar } from "@/components/layout/topbar";
 import { apiRequest } from "@/lib/queryClient";
 import type { TrainingJob, TrainingMetric } from "@shared/schema";
 
@@ -137,11 +136,6 @@ export default function TrainingPage() {
 
   return (
     <>
-      <Topbar 
-        title="Training Platform"
-        description="Configure and monitor your robot training experiments"
-      />
-      
       <div className="space-y-6">
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

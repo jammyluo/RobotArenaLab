@@ -3,7 +3,6 @@ import { Share, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Topbar } from "@/components/layout/topbar";
 import { CommunityPost } from "@/components/community/community-post";
 import type { CommunityPost as CommunityPostType, User, Model } from "@shared/schema";
 
@@ -66,10 +65,6 @@ export default function CommunityPage() {
   if (isLoading) {
     return (
       <>
-        <Topbar 
-          title="Community"
-          description="Share models and collaborate with other researchers"
-        />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -101,11 +96,6 @@ export default function CommunityPage() {
 
   return (
     <>
-      <Topbar 
-        title="Community"
-        description="Share models and collaborate with other researchers"
-      />
-      
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
