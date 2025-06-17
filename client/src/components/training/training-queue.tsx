@@ -1,12 +1,16 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Square } from "lucide-react";
 import type { TrainingJob } from "@shared/schema";
 
 interface TrainingQueueProps {
   jobs: TrainingJob[];
+  onStopTraining?: (jobId: number) => void;
+  isStoppingJob?: number | null;
 }
 
-export function TrainingQueue({ jobs }: TrainingQueueProps) {
+export function TrainingQueue({ jobs, onStopTraining, isStoppingJob }: TrainingQueueProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'running':
@@ -70,18 +74,31 @@ export function TrainingQueue({ jobs }: TrainingQueueProps) {
                 </div>
               </div>
               
-              <div className="text-right">
-                <span className="text-sm font-medium text-slate-50">
-                  {job.progress}%
-                </span>
-                {job.status === 'running' && (
-                  <div className="w-16 h-1.5 bg-slate-600 rounded-full mt-1">
-                    <div 
-                      className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-300"
-                      style={{ width: `${job.progress}%` }}
-                    />
-                  </div>
+              <div className="flex items-center space-x-3">
+                {job.status === 'running' && onStopTraining && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onStopTraining(job.id)}
+                    disabled={isStoppingJob === job.id}
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                  >
+                    <Square className="w-4 h-4" />
+                  </Button>
                 )}
+                <div className="text-right">
+                  <span className="text-sm font-medium text-slate-50">
+                    {job.progress}%
+                  </span>
+                  {job.status === 'running' && (
+                    <div className="w-16 h-1.5 bg-slate-600 rounded-full mt-1">
+                      <div 
+                        className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-300"
+                        style={{ width: `${job.progress}%` }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}

@@ -11,6 +11,8 @@ import CommunityPage from "@/pages/community";
 import ValidationPage from "@/pages/validation";
 import NotFound from "@/pages/not-found";
 import MarketplacePage from "@/pages/marketplace";
+import ModelConfigPage from "@/pages/model-config";
+import TrainingMonitorPage from "@/pages/training-monitor";
 
 function Router() {
   return (
@@ -18,6 +20,8 @@ function Router() {
       <Route path="/marketplace" component={MarketplacePage} />
       <Route path="/" component={TrainingPage} />
       <Route path="/training" component={TrainingPage} />
+      <Route path="/model-config" component={ModelConfigPage} />
+      <Route path="/training-monitor" component={TrainingMonitorPage} />
       <Route path="/models" component={ModelsPage} />
       <Route path="/community" component={CommunityPage} />
       <Route path="/validation" component={ValidationPage} />
@@ -42,6 +46,12 @@ function App() {
   } else if (location === "/validation") {
     title = "Remote Validation";
     description = "Validate your models remotely";
+  } else if (location === "/model-config") {
+    title = "Model Configuration";
+    description = "Configure robot models and reward functions";
+  } else if (location === "/training-monitor") {
+    title = "Training Monitor";
+    description = "View training progress and manage queue";
   }
 
   return (

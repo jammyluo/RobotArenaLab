@@ -19,7 +19,7 @@ export function LogOutput({ jobId }: LogOutputProps) {
   const logsEndRef = useRef<HTMLDivElement>(null);
   const { subscribe } = useWebSocket();
 
-  // 加载历史日志
+  // Load historical logs
   useEffect(() => {
     if (!jobId) return;
     fetch(`/api/training-logs/${jobId}`)
@@ -27,7 +27,7 @@ export function LogOutput({ jobId }: LogOutputProps) {
       .then(data => setLogs(data));
   }, [jobId]);
 
-  // WebSocket 追加新日志
+  // Append new logs via WebSocket
   useEffect(() => {
     if (!jobId) return;
     const unsubscribe = subscribe('training_log', (data: any) => {

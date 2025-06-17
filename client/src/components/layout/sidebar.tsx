@@ -4,12 +4,22 @@ import {
   Archive, 
   Users, 
   Video,
-  Cpu
+  Cpu,
+  Settings,
+  Activity
 } from "lucide-react";
 
 const navigation = [
   { name: "Model Marketplace", href: "/marketplace", icon: Archive },
-  { name: "Training Platform", href: "/training", icon: Zap },
+  { 
+    name: "Training Center", 
+    href: "/training", 
+    icon: Zap,
+    children: [
+      { name: "Model Configuration", href: "/model-config", icon: Settings },
+      { name: "Training Monitor", href: "/training-monitor", icon: Activity }
+    ]
+  },
   { name: "Model Library", href: "/models", icon: Archive },
   { name: "Community", href: "/community", icon: Users },
   { name: "Remote Validation", href: "/validation", icon: Video },
@@ -27,7 +37,7 @@ export function Sidebar() {
             <Cpu className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-50">ArenaTech</h1>
+            <h1 className="text-xl font-bold text-slate-50">Robot Arena</h1>
             <p className="text-xs text-slate-400">Isaac Gym Robotics Platform</p>
           </div>
         </div>
@@ -37,7 +47,9 @@ export function Sidebar() {
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
           {navigation.map((item) => {
-            const isActive = location === item.href || (item.href === "/training" && location === "/");
+            const isActive = location === item.href || 
+              (item.href === "/training" && location === "/") ||
+              (item.children?.some(child => child.href === location));
             const Icon = item.icon;
             
             return (
@@ -48,6 +60,25 @@ export function Sidebar() {
                     {item.name}
                   </a>
                 </Link>
+                {item.children && (
+                  <ul className="ml-8 mt-2 space-y-2">
+                    {item.children.map(child => {
+                      const ChildIcon = child.icon;
+                      const isChildActive = location === child.href;
+                      
+                      return (
+                        <li key={child.name}>
+                          <Link href={child.href}>
+                            <a className={`nav-item text-sm ${isChildActive ? 'active' : ''}`}>
+                              <ChildIcon className="w-4 h-4 mr-2" />
+                              {child.name}
+                            </a>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
             );
           })}
